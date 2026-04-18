@@ -1,0 +1,79 @@
+<html>
+    <head>
+        <title>Change Password</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="box">
+            <div class="form">
+                <h3>Form Ganti Password</h3>
+                <form onsubmit="return cekForm()">
+                    <div class="inputbox">
+                        <h5>Username Anda: <p id="user"></p></h5><br>
+                     </div>
+                    <div class="inputbox">
+                        <input type="password" id="password"  required placeholder="Masukkan Password Baru">
+                    </div>
+                   <button type="submit" value="submit" class="sub" id="submit" onclick="clearInput()">Submit</button>
+                    
+                    <div>
+                    <a href="home.html" style="font-size:17px;">Kembali</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+       <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
+import { getDatabase, ref, update } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js";
+
+            // Firebase config
+            const firebaseConfig = {
+                apiKey: "AIzaSyC0D0j5H_er4TYdRdQj7xqCiTCSas30YY0",
+                authDomain: "backuptransksi.firebaseapp.com",
+                databaseURL: "https://backuptransksi-default-rtdb.asia-southeast1.firebasedatabase.app",
+                projectId: "backuptransksi",
+                storageBucket: "backuptransksi.firebasestorage.app",
+                messagingSenderId: "205255091131",
+                appId: "1:205255091131:web:05bb8036f0d93cbf621a9e"
+            };
+
+            // Init
+            const app = initializeApp(firebaseConfig);
+            const db = getDatabase(app);
+
+            // Ambil username dari localStorage
+            const username = localStorage.getItem("username");
+
+            // Tampilkan username ke layar
+            if (username) {
+                document.getElementById("user").textContent = username;
+            } else {
+                alert("User tidak ditemukan, silakan login ulang");
+                window.location.href = "index.html";
+            }
+
+            // Submit form
+            document.querySelector("form").addEventListener("submit", function(e) {
+                e.preventDefault();
+
+                const newPassword = document.getElementById("password").value;
+
+                if (newPassword.length < 3) {
+                    alert("Password minimal 3 karakter!");
+                    return;
+                }
+
+                update(ref(db, "users/" + username), {
+                    password: newPassword
+                })
+                .then(() => {
+                    alert("Password berhasil diganti!");
+                    document.getElementById("password").value = "";
+                })
+                .catch((error) => {
+                    alert("Gagal update: " + error);
+                });
+            });
+</script>
+    </body>
+</html>
