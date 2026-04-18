@@ -245,7 +245,7 @@ function cekWaktuAbsen() {
     const menit = now.getMinutes();
 
     // Batas waktu 08:16
-    if (jam > 8 || (jam === 8 && menit >= 15)) {
+    if (jam > 9 || (jam === 8 && menit >= 15)) {
 
         Swal.fire({
             icon: 'warning',
